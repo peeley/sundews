@@ -3,7 +3,7 @@ version: "3.9"
 services:
   backend:
     build:
-      dockerfile: Dockerfile-backend
+      dockerfile: Dockerfile
       context: .
     ports:
       - "127.0.0.1:7000:7000"
@@ -12,6 +12,17 @@ services:
       - ./:/app
       - ~/.m2:/root/.m2
       - ~/.lein:/root/.lein
+
+  frontend:
+    image: theasp/clojurescript-nodejs:latest
+    ports:
+      - "127.0.0.1:7002:7002"
+      - "9630:9630"
+    volumes:
+      - ./:/tmp
+      - ~/.m2:/root/.m2
+      - ~/.lein:/root/.lein
+    command: npx shadow-cljs watch app
 
   postgres:
     image: postgres:latest

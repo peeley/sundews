@@ -1,7 +1,5 @@
-FROM openjdk:8-alpine
+FROM clojure:lein
 
-COPY target/uberjar/drosera.jar /drosera/app.jar
+WORKDIR /app
 
-EXPOSE 3000
-
-CMD ["java", "-jar", "/drosera/app.jar"]
+CMD lein run
