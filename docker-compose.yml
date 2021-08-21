@@ -2,16 +2,15 @@ version: "3.9"
 
 services:
   backend:
-    build:
-      dockerfile: Dockerfile
-      context: .
+    image: clojure:lein
     ports:
       - "127.0.0.1:7000:7000"
       - "3000:3000"
     volumes:
-      - ./:/app
+      - ./:/tmp
       - ~/.m2:/root/.m2
       - ~/.lein:/root/.lein
+    command: lein run
 
   frontend:
     image: theasp/clojurescript-nodejs:latest
