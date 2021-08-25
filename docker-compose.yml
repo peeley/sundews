@@ -4,7 +4,7 @@ services:
   backend:
     image: clojure:lein
     ports:
-      - "127.0.0.1:7000:7000"
+      - "7000:7000"
       - "3000:3000"
     volumes:
       - ./:/tmp
@@ -15,10 +15,11 @@ services:
   frontend:
     image: theasp/clojurescript-nodejs:latest
     ports:
-      - "127.0.0.1:7002:7002"
+      - "7002:7002"
       - "9630:9630"
     volumes:
       - ./:/tmp
+      - ./node_modules/:/tmp/node_modules
       - ~/.m2:/root/.m2
       - ~/.lein:/root/.lein
     command: npx shadow-cljs watch app

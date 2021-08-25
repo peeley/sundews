@@ -1,4 +1,8 @@
-FROM clojure:lein AS build
+FROM node:16 as install_npm
+
+RUN npm install
+
+FROM clojure:lein AS build_clj
 
 COPY ./project.clj /app/project.clj
 COPY ./shadow-cljs.edn /app/shadow-cljs.edn
@@ -12,6 +16,7 @@ RUN lein uberjar
 
 FROM clojure:latest
 
-COPY --from=build /app/target/uberjar/drosera.jar .
+COPY --from=build_clj /app/target/uberjar/drosera.jar .
+COPY --from=install_npm /node_modules
 
 CMD java -jar drosera.jar
