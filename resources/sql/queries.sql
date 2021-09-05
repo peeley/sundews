@@ -19,3 +19,13 @@ WHERE id = :id
 -- :doc deletes a user record given the id
 DELETE FROM users
 WHERE id = :id
+
+-- :name create-link! :! :n
+-- :doc creates a new shortlink
+INSERT INTO links
+(link, user_id)
+VALUES (:link, :user_id)
+
+-- :name get-link-by-id :? :1
+-- :doc retrieves link by id
+SELECT * FROM links where id = :id;
