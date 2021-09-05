@@ -3,6 +3,7 @@
     [drosera.middleware :as middleware]
     [drosera.layout :refer [error-page]]
     [drosera.routes.home :refer [home-routes]]
+    [drosera.routes.links :refer [links-routes]]
     [reitit.ring :as ring]
     [ring.middleware.content-type :refer [wrap-content-type]]
     [ring.middleware.webjars :refer [wrap-webjars]]
@@ -17,7 +18,8 @@
   :start
   (ring/ring-handler
     (ring/router
-      [(home-routes)])
+     [(home-routes)
+      (links-routes)])
     (ring/routes
       (ring/create-resource-handler
         {:path "/"})
