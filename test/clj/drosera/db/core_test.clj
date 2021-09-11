@@ -17,22 +17,33 @@
     (migrations/migrate ["migrate"] (select-keys env [:database-url]))
     (f)))
 
-(deftest test-users
+;; (deftest test-users
+;;   (jdbc/with-transaction [t-conn *db* {:rollback-only true}]
+;;     (is (= 1 (db/create-user!
+;;               t-conn
+;;               {:id         1
+;;                :first_name "Sam"
+;;                :last_name  "Smith"
+;;                :email      "sam.smith@example.com"
+;;                :pass       "pass"}
+;;               {})))
+;;     (is (= {:id         1
+;;             :first_name "Sam"
+;;             :last_name  "Smith"
+;;             :email      "sam.smith@example.com"
+;;             :pass       "pass"
+;;             :admin      nil
+;;             :last_login nil
+;;             :is_active  nil}
+;;            (db/get-user t-conn {:id "1"} {})))))
+
+(deftest test-links
   (jdbc/with-transaction [t-conn *db* {:rollback-only true}]
-    (is (= 1 (db/create-user!
-              t-conn
-              {:id         "1"
-               :first_name "Sam"
-               :last_name  "Smith"
-               :email      "sam.smith@example.com"
-               :pass       "pass"}
-              {})))
-    (is (= {:id         "1"
-            :first_name "Sam"
-            :last_name  "Smith"
-            :email      "sam.smith@example.com"
-            :pass       "pass"
-            :admin      nil
-            :last_login nil
-            :is_active  nil}
-           (db/get-user t-conn {:id "1"} {})))))
+    (let [{id :id} (db/create-link!
+                    t-conn
+                    {:link "abc.com"
+                     :user_id nil}
+                    {})]
+      (is (= id (:id (db/get-link-by-id t-conn {:id id} {}))))
+      (is (= "abc.com" (:link (db/get-link-by-id t-conn {:id id} {}))))
+      (is (= 1 (db/delete-link-by-id! t-conn {:id id} {}))))))
