@@ -1,12 +1,17 @@
 (ns drosera.links)
 
-(def ^:private slug-alphabet
+(def slug-alphabet
   (mapv char
-        (concat (range (int \a) (int \z))
-                (range (int \A) (int \Z))
-                (range (int \0) 58))))
+        (concat (range (int \a) (inc (int \z)))
+                (range (int \A) (inc (int \Z)))
+                (range (int \0) (inc (int \9))))))
 
-(def ^:private alphabet-length (count slug-alphabet))
+(def slug-alphabet-length (count slug-alphabet))
+
+;; the slug "a" will never exist in the wild, as that represents an id of 0.
+;; there are other odd interactions, where an id of 0 is encoded to the empty
+;; string. these shouldn't ever occur (since serial ids start at 1), but
+;; something to be aware of.
 
 (defn encode-id-to-slug
   [link-id]
@@ -15,8 +20,8 @@
     (if (= id-int 0)
       slug
       (recur
-       (str (nth slug-alphabet (dec (mod id-int alphabet-length))) slug)
-       (quot id-int alphabet-length)))))
+       (str (nth slug-alphabet (mod id-int slug-alphabet-length)) slug)
+       (quot id-int slug-alphabet-length)))))
 
 (defn decode-slug-to-id
   [slug-text]
@@ -26,7 +31,7 @@
       (int id)
       (recur
        (+ id
-          (* (inc (.indexOf slug-alphabet (last slug-str)))
-             (Math/pow alphabet-length
+          (* (.indexOf slug-alphabet (last slug-str))
+             (Math/pow slug-alphabet-length
                        (- (count slug-text) (count slug-str)))))
        (drop-last slug-str)))))
