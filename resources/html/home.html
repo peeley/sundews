@@ -10,20 +10,10 @@
     <div id="app">
       <section class="section">
         <div class="container is-fluid">
-          <div class="content">
-            <h4 class="title">Welcome to drosera</h4>
-            <p>If you're seeing this message, that means you haven't yet compiled your ClojureScript!</p>
-            <p>Please run <code>shadow-cljs watch app</code> to start the ClojureScript compiler and reload the page.</p>
-            <h4>For better ClojureScript development experience in Chrome follow these steps:</h4>
-            <ul>
-              <li>Open DevTools
-              <li>Go to Settings ("three dots" icon in the upper right corner of DevTools > Menu > Settings F1 > General > Console)
-              <li>Check-in "Enable custom formatters"
-              <li>Close DevTools
-              <li>Open DevTools
-            </ul>
-            <p>See <a href="http://www.luminusweb.net/docs/clojurescript.md">ClojureScript</a> documentation for further details.</p>
-          </div>
+          <form action="/link/create" method="POST">
+            <input type="text" value="" name="link" placeholder="enter link...">
+            <button type="submit">shorten</button>
+          </form>
         </div>
       </section>
     </div>

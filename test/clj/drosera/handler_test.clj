@@ -23,5 +23,8 @@
       (is (= 200 (:status response)))))
 
   (testing "not-found route"
-    (let [response ((app) (request :get "/bad"))]
-      (is (= 404 (:status response))))))
+    (let [response ((app) (request :get "/invalid"))]
+      (is (= 404 (:status response)))))
+
+  (testing "can create link"
+    (let [response ((app) (request :post "/link/create"))])))

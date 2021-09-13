@@ -28,7 +28,7 @@
   (loop [id 0
          slug-str slug-text]
     (if (empty? slug-str)
-      (int id)
+      (bigint id)
       (recur
        (+ id
           (* (.indexOf slug-alphabet (last slug-str))
