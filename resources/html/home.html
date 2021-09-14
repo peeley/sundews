@@ -11,6 +11,7 @@
       <section class="section">
         <div class="container is-fluid">
           <form action="/link/create" method="POST">
+            {% csrf-field %}
             <input type="text" value="" name="link" placeholder="enter link...">
             <button type="submit">shorten</button>
           </form>
