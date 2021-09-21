@@ -1,6 +1,0 @@
-{
-  "devDependencies": {
-    "shadow-cljs": "^2.14.3"
-  },
-  "dependencies":{}
-}
