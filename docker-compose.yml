@@ -1,0 +1,26 @@
+version: "3"
+
+volumes:
+  sundews_db_data:
+
+services:
+  web:
+    image: clojure:latest
+    ports:
+      - 4783:4783 # for HTTP server
+      - 7001:7001 # for nREPL server
+    volumes:
+      - ./:/tmp
+      - ~/.m2:/root/.m2
+      - ~/.lein:/root/.lein
+    command: lein repl :headless
+
+  database:
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=sundews
+      - POSTGRES_PASSWORD=sundews_passwd
+    volumes:
+      - sundews_db_data:/var/lib/postgresql
