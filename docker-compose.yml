@@ -9,6 +9,10 @@ services:
     ports:
       - 4783:4783 # for HTTP server
       - 7001:7001 # for nREPL server
+    environment:
+      - DB_NAME=sundews
+      - DB_USER=sundews
+      - DB_PASSWORD=sundews_passwd
     volumes:
       - ./:/tmp
       - ~/.m2:/root/.m2
