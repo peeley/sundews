@@ -12,6 +12,7 @@ services:
     environment:
       - DB_NAME=sundews
       - DB_USER=sundews
+      - DB_HOST=database
       - DB_PASSWORD=sundews_passwd
     volumes:
       - ./:/tmp
