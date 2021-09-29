@@ -9,12 +9,9 @@
   (compojure/POST "/links/create"
                   {{:keys [link]} :params}
                   link)
-  (compojure/GET "/" _ (-> {:status 200 :body (views/index)}
+  (compojure/GET "/" [] (-> {:status 200 :body (views/index)}
                             (response/content-type "text/html")
                             (response/charset "utf-8"))))
 
 (def handler
   (wrap-defaults routes site-defaults))
-
-(comment
-  )

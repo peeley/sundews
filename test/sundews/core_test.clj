@@ -1,7 +1,16 @@
 (ns sundews.core-test
-  (:require [clojure.test :refer :all]
-            [sundews.core :refer :all]))
+  (:require [clojure.test :refer [deftest is testing]]
+            [sundews.routes :as routes]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest router-tests
+  (testing "Index page successfully routes"
+    (let [response (routes/handler {:uri "/" :request-method :get})
+          response-status (:status response)
+          response-body (:body response)]
+      (is (= response-status 200))
+      (is (re-find #"Sundews" response-body))))
+  (testing "Cross-site forgery token needed on /links/create"
+    (let [response (routes/handler {:uri "/links/create"
+                                    :request-method :post
+                                    :form-params {"link" "_"}})]
+      (is (= (:status response) 403)))))

@@ -11,13 +11,9 @@
 
 (def db (jdbc/get-datasource db-spec))
 
-(defn- db-execute
-  [db sql]
-  (jdbc/execute! db sql))
-
 (defn migrate-up
   []
-  (db-execute db
+  (jdbc/execute! db
               ["CREATE TABLE IF NOT EXISTS links (
                     id SERIAL,
                     url TEXT NOT NULL,
@@ -26,9 +22,23 @@
 
 (defn migrate-down
   []
-  (db-execute db ["DROP TABLE links;"]))
+  (jdbc/execute! db ["DROP TABLE links;"]))
 
 (defn insert-link!
   [db link-text]
-  (db-execute db (sql/format {:insert-into "links"
-                              :values [{:url link-text}]})))
+  (jdbc/execute-one! db (sql/format {:insert-into "links"
+                                 :values [{:url link-text}]
+                                 :returning [:id]})))
+
+(defn get-link-by-id
+  [db id]
+  (jdbc/execute-one! db (sql/format {:select [:*]
+                                     :from [:links]
+                                     :where [:= :id id]})))
+
+(defn get-all-links
+  [db]
+  (jdbc/execute! db (sql/format {:select [:*]
+                                 :from [:links]})))
+
+(map :links/url (get-all-links db))

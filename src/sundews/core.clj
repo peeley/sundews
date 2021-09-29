@@ -17,6 +17,11 @@
   (when @server (.stop @server))
   (reset! server nil))
 
+(defn restart-server
+  []
+  (stop-server)
+  (start-server))
+
 (defn -main
   []
   (start-server))
