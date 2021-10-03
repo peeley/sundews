@@ -40,3 +40,9 @@
   [db]
   (jdbc/execute! db (sql/format {:select [:*]
                                  :from [:links]})))
+
+(defn get-link-by-url
+  [db url]
+  (jdbc/execute! db (sql/format {:select [:*]
+                              :from [:links]
+                              :where [:= :url url]})))
