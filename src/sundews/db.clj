@@ -40,5 +40,3 @@
   [db]
   (jdbc/execute! db (sql/format {:select [:*]
                                  :from [:links]})))
-
-(map :links/url (get-all-links db))
