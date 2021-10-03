@@ -6,17 +6,15 @@
 
 (defn index-handler
   []
-  (-> {:status 200 :body (views/index)}
-      (response/content-type "text/html")
-      (response/charset "utf-8")))
+  (views/index 200))
 
 (defn create-link-handler
-  [link]
-  (let [link-id (:links/id (db/insert-link! link))
-        link-slug (links/encode-id-to-slug link-id)]
-    (-> {:status 200 :body link-slug}
-        (response/content-type "text/html")
-        (response/charset "utf-8"))))
+  [db link]
+  (if (empty? link)
+    (views/index 403 :invalid)
+    (let [link-id (:links/id (db/insert-link! db link))
+          link-slug (links/encode-id-to-slug link-id)]
+      (views/index 200 :success link-slug))))
 
 (defn redirect-handler
   [slug]
