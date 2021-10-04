@@ -6,7 +6,7 @@
 
 (compojure/defroutes routes
   (compojure/POST "/links/create" [link] (create-link-handler db/db link))
-  (compojure/GET "/:slug" [slug] (redirect-handler slug))
+  (compojure/GET "/:slug" [slug] (redirect-handler db/db slug))
   (compojure/GET "/" [] (index-handler)))
 
 (def handler

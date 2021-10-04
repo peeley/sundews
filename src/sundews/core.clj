@@ -25,3 +25,8 @@
 (defn -main
   []
   (start-server))
+
+(comment
+  (start-server)
+  (stop-server)
+  (restart-server))

@@ -9,9 +9,9 @@
 
 (defhtml index-template
   [status shortened-link]
-  [:body [:h1 "Sundews"]
+  [:body [:h1 [:a {:href "/"} "Sundews"]]
    (when (= status :success)
-     [:p "Your shortened link is" [:a {:href shortened-link} shortened-link] "."])
+     [:p "Your shortened link is " [:a {:href (str "/" shortened-link)} shortened-link]])
    (when (= status :invalid)
      [:p "Your submitted link is invalid."])
    (form/form-to [:post "/links/create"]
@@ -20,7 +20,7 @@
                  (form/submit-button "Submit"))])
 
 (defn index
-  [status & [status shortened-link]]
-  (-> {:status status :body (index-template status shortened-link)}
+  [status & [link-status shortened-link]]
+  (-> {:status status :body (index-template link-status shortened-link)}
       (response/content-type "text/html")
       (response/charset "utf-8")))

@@ -17,7 +17,9 @@
       (views/index 200 :success link-slug))))
 
 (defn redirect-handler
-  [slug]
+  [db slug]
   (let [link-id (links/decode-slug-to-id slug)
-        redirect-url (db/get-link-by-id link-id)]
-    (response/redirect redirect-url)))
+        redirect-url (:links/url (db/get-link-by-id db link-id))]
+    (if redirect-url
+      (response/redirect redirect-url)
+      (response/not-found "This link is either expired or invalid."))))
