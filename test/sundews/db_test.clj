@@ -18,4 +18,11 @@
       (testing "Can delete links created before arbitrary time"
         (let [now (time/instant->sql-timestamp (time/instant))]
           (db/delete-links-created-before! test-db now)
-          (is (empty? (db/get-all-links test-db))))))))
+          (is (empty? (db/get-all-links test-db))))
+        (let [new-link-id (:links/id (db/insert-link! test-db "abc.com"))
+              future (-> (time/instant)
+                         (time/plus (time/minutes 5))
+                         time/instant->sql-timestamp)]
+          (db/update-link-created-time test-db future new-link-id)
+          (is (= (count (db/get-all-links test-db)) 1))
+          (is (not-empty (db/get-link-by-url test-db "abc.com"))))))))

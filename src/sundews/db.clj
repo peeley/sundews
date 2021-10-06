@@ -27,8 +27,8 @@
 (defn insert-link!
   [db link-text]
   (jdbc/execute-one! db (sql/format {:insert-into "links"
-                                 :values [{:url link-text}]
-                                 :returning [:id]})))
+                                     :values [{:url link-text}]
+                                     :returning [:id]})))
 
 (defn get-link-by-id
   [db id]
@@ -44,8 +44,8 @@
 (defn get-link-by-url
   [db url]
   (jdbc/execute! db (sql/format {:select [:*]
-                              :from [:links]
-                              :where [:= :url url]})))
+                                 :from [:links]
+                                 :where [:= :url url]})))
 
 (defn delete-links-created-before!
   [db timestamp]
@@ -55,6 +55,12 @@
 (defn delete-all-links!
   [db]
   (jdbc/execute! db (sql/format {:delete-from [:links]})))
+
+(defn update-link-created-time
+  [db new-time link-id]
+  (jdbc/execute! db (sql/format {:update [:links]
+                                 :set {:created_at new-time}
+                                 :where [:= :id link-id]})))
 
 (comment
   (migrate-up)
