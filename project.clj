@@ -5,6 +5,7 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[com.github.seancorfield/next.jdbc "1.2.709"]
                  [compojure "1.6.2"]
+                 [clojure.java-time "0.3.3"]
                  [hiccup "1.0.5"]
                  [com.github.seancorfield/honeysql "2.0.783"]
                  [org.clojure/clojure "1.10.1"]

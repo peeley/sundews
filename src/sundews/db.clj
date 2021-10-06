@@ -46,3 +46,17 @@
   (jdbc/execute! db (sql/format {:select [:*]
                               :from [:links]
                               :where [:= :url url]})))
+
+(defn delete-links-created-before!
+  [db timestamp]
+  (jdbc/execute! db (sql/format {:delete-from [:links]
+                                 :where [:< :created_at timestamp]})))
+
+(defn delete-all-links!
+  [db]
+  (jdbc/execute! db (sql/format {:delete-from [:links]})))
+
+(comment
+  (migrate-up)
+  (migrate-down)
+  )
