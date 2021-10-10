@@ -19,8 +19,22 @@
                  (form/text-field {:placeholder "Shorten link"} "link")
                  (form/submit-button "Submit"))])
 
-(defn index
-  [status & [link-status shortened-link]]
-  (-> {:status status :body (index-template link-status shortened-link)}
+(declare not-found-template)
+
+(defhtml not-found-template
+  []
+  [:body [:h1 "Page not found."]])
+
+(defn- make-view
+  [status view]
+  (-> {:status status :body view}
       (response/content-type "text/html")
       (response/charset "utf-8")))
+
+(defn index
+  [status & [link-status shortened-link]]
+  (make-view status (index-template link-status shortened-link)))
+
+(defn not-found
+  []
+  (make-view 404 (not-found-template)))

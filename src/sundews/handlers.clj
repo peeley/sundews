@@ -23,3 +23,7 @@
     (if redirect-url
       (response/redirect redirect-url)
       (response/not-found "This link is either expired or invalid."))))
+
+(defn not-found-handler
+  []
+  (views/not-found))

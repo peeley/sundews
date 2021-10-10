@@ -13,4 +13,8 @@
     (let [response (routes/handler {:uri "/links/create"
                                     :request-method :post
                                     :form-params {"link" "_"}})]
-      (is (= (:status response) 403)))))
+      (is (= (:status response) 403))))
+  (testing "Missing pages return 404s"
+    (let [response (routes/handler {:uri "/gocrazy/gostupid"
+                                    :request-method :get})]
+      (is (= (:status response) 404)))))
