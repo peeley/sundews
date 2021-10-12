@@ -36,3 +36,10 @@
              (Math/pow slug-alphabet-length
                        (- (count slug-text) (count slug-str)))))
        (drop-last slug-str)))))
+
+(defn make-link-from-slug
+  [url slug]
+  (when (empty? slug)
+    ;; TODO turn into log statement
+    (println "empty slug when constructing url"))
+  (str url "/" slug))

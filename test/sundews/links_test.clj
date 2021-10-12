@@ -1,5 +1,6 @@
 (ns sundews.links-test
   (:require [sundews.links :refer [encode-id-to-slug
+                                   make-link-from-slug
                                    decode-slug-to-id
                                    slug-alphabet-length]]
             [clojure.test :refer [deftest is testing]]))
@@ -17,5 +18,8 @@
     (is (= slug-alphabet-length (decode-slug-to-id "ba"))))
   (testing "Encode -> decode is identity for arbitrary range"
     (let [test-range (range 0 1000)
-          encoded-then-decoded (map #(-> % encode-id-to-slug decode-slug-to-id) test-range)]
-      (is (map #(= %1 %2) test-range encoded-then-decoded)))))
+          encoded-then-decoded (map (comp decode-slug-to-id encode-id-to-slug) test-range)]
+      (is (every? identity (map #(= %1 %2) test-range encoded-then-decoded)))))
+  (testing "Can construct URLs from slugs and env vars"
+    (is (= "http://sunde.ws/P" (make-link-from-slug "http://sunde.ws" "P")))
+    (is (= "http://sunde.ws/" (make-link-from-slug "http://sunde.ws" "")))))
