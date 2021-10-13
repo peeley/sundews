@@ -9,7 +9,7 @@
               :port 5432
               :password (System/getenv "DB_PASSWORD")})
 
-(def db (jdbc/get-datasource db-spec))
+(defonce db (jdbc/get-datasource db-spec))
 
 (defn migrate-up
   []
