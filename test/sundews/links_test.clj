@@ -3,7 +3,10 @@
                                    make-link-from-slug
                                    decode-slug-to-id
                                    slug-alphabet-length]]
-            [clojure.test :refer [deftest is testing]]))
+            [clojure.test :refer [deftest is testing]]
+            [clojure.test.check.clojure-test :refer [defspec]]
+            [clojure.test.check.generators :as gen]
+            [clojure.test.check.properties :as prop]))
 
 (deftest links-test
   (testing "Can encode ids to slugs"
@@ -16,10 +19,11 @@
     (is (= 1 (decode-slug-to-id "b")))
     (is (= 2 (decode-slug-to-id "c")))
     (is (= slug-alphabet-length (decode-slug-to-id "ba"))))
-  (testing "Encode -> decode is identity for arbitrary range"
-    (let [test-range (range 0 1000)
-          encoded-then-decoded (map (comp decode-slug-to-id encode-id-to-slug) test-range)]
-      (is (every? identity (map #(= %1 %2) test-range encoded-then-decoded)))))
   (testing "Can construct URLs from slugs and env vars"
     (is (= "http://sunde.ws/P" (make-link-from-slug "http://sunde.ws" "P")))
     (is (= "http://sunde.ws/" (make-link-from-slug "http://sunde.ws" "")))))
+
+(defspec encode-then-decode-is-identity
+  10000
+  (prop/for-all [num gen/nat]
+                (= num (-> num encode-id-to-slug decode-slug-to-id))))

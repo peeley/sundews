@@ -9,6 +9,7 @@
                  [hiccup "1.0.5"]
                  [com.github.seancorfield/honeysql "2.0.783"]
                  [org.clojure/clojure "1.10.1"]
+                 [org.clojure/test.check "1.1.0"]
                  [org.postgresql/postgresql "42.2.10"]
                  [clojurewerkz/quartzite "2.1.0"]
                  [ring "1.9.4"]
