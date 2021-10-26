@@ -22,7 +22,8 @@
         redirect-url (:links/url (db/get-link-by-id db link-id))]
     (if redirect-url
       (response/redirect redirect-url)
-      (response/not-found "This link is either expired or invalid."))))
+      (-> (response/not-found "This link is either expired or invalid.")
+          (response/content-type "text/html")))))
 
 (defn not-found-handler
   []
