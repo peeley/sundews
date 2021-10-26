@@ -1,32 +1,19 @@
 (ns sundews.core
   (:gen-class)
   (:require [ring.adapter.jetty :as jetty]
-            [sundews.routes :as routes]))
+            [sundews.routes :as routes]
+            [mount.core :as mount :refer [defstate]]))
 
-(defonce server (atom nil))
-
-(defn start-server
-  []
-  (reset! server
-         (jetty/run-jetty
+(defstate server
+  :start (jetty/run-jetty
           #'routes/handler
-          {:port 4783 :join? false})))
-
-(defn stop-server
-  []
-  (when @server (.stop @server))
-  (reset! server nil))
-
-(defn restart-server
-  []
-  (stop-server)
-  (start-server))
+          {:port 4783 :join? false})
+  :stop (.stop server))
 
 (defn -main
   []
-  (start-server))
+  (mount/start))
 
 (comment
-  (start-server)
-  (stop-server)
-  (restart-server))
+  (mount/start)
+  (mount/stop))

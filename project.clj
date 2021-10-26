@@ -14,7 +14,8 @@
                  [clojurewerkz/quartzite "2.1.0"]
                  [ring "1.9.4"]
                  [ring/ring-anti-forgery "1.2.0"]
-                 [ring/ring-defaults "0.3.3"]]
+                 [ring/ring-defaults "0.3.3"]
+                 [mount "0.1.16"]]
   :main ^:skip-aot sundews.core
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all

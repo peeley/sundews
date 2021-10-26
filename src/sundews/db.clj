@@ -1,6 +1,7 @@
 (ns sundews.db
   (:require [next.jdbc :as jdbc]
-            [honey.sql :as sql]))
+            [honey.sql :as sql]
+            [mount.core :refer [defstate]]))
 
 (def db-spec {:dbtype "postgresql"
               :dbname (System/getenv "DB_USER")
@@ -9,7 +10,8 @@
               :port 5432
               :password (System/getenv "DB_PASSWORD")})
 
-(defonce db (jdbc/get-datasource db-spec))
+(defstate db
+  :start (jdbc/get-datasource db-spec))
 
 (defn migrate-up
   []

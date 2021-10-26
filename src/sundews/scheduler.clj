@@ -5,9 +5,12 @@
             [clojurewerkz.quartzite.triggers :as triggers]
             [clojurewerkz.quartzite.schedule.simple :refer [schedule with-interval-in-seconds repeat-forever]]
             [sundews.db :as db]
-            [java-time :as java-time]))
+            [java-time :as java-time]
+            [mount.core :refer [defstate]]))
 
-(def cleanup-scheduler (scheduler/start (scheduler/initialize)))
+(defstate job-scheduler
+  :start (scheduler/start (scheduler/initialize))
+  :stop (scheduler/shutdown job-scheduler))
 
 (def cleanup-job-key "jobs.cleanup.1")
 
