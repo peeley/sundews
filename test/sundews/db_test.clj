@@ -5,9 +5,11 @@
             [java-time :as time]
             [mount.core :as mount]))
 
+;; TODO refactor, should only need to migrate once
 (defn db-fixture
   [f]
   (mount/start #'db/db)
+  (db/migrate-up db/db)
   (f)
   (mount/stop #'db/db))
 

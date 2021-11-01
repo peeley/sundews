@@ -14,7 +14,7 @@
   :start (jdbc/get-datasource db-spec))
 
 (defn migrate-up
-  []
+  [db]
   (jdbc/execute! db
               ["CREATE TABLE IF NOT EXISTS links (
                     id SERIAL,
@@ -65,6 +65,6 @@
                                  :where [:= :id link-id]})))
 
 (comment
-  (migrate-up)
-  (migrate-down)
+  (migrate-up db)
+  (migrate-down db)
   )
