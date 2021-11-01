@@ -2,7 +2,7 @@
   (:require [clojurewerkz.quartzite.scheduler :as scheduler]
             [clojurewerkz.quartzite.jobs :as jobs :refer [defjob]]
             [clojurewerkz.quartzite.triggers :as triggers]
-            [clojurewerkz.quartzite.schedule.simple :refer [schedule with-interval-in-seconds repeat-forever]]
+            [clojurewerkz.quartzite.schedule.simple :refer [schedule with-interval-in-days repeat-forever]]
             [sundews.db :as db]
             [java-time :as java-time]
             [mount.core :refer [defstate]]))
@@ -27,7 +27,7 @@
   (triggers/build (triggers/with-identity cleanup-trigger-key)
                   (triggers/start-now)
                   (triggers/with-schedule (schedule (repeat-forever)
-                                                    (with-interval-in-seconds 1)))))
+                                                    (with-interval-in-days 1)))))
 (defstate cleanup-job
   :start (scheduler/schedule job-scheduler job trigger)
   :stop (scheduler/delete-job job-scheduler cleanup-job-key))
