@@ -2,9 +2,17 @@
   (:require [sundews.handlers :as handlers]
             [sundews.db :as db]
             [sundews.links :as links]
-            [clojure.test :refer [deftest is testing]]
+            [clojure.test :as t :refer [deftest is testing]]
+            [mount.core :as mount]
             [next.jdbc :refer [with-transaction]]))
 
+(defn db-fixture
+  [f]
+  (mount/start #'db/db)
+  (f)
+  (mount/stop #'db/db))
+
+(t/use-fixtures :once db-fixture)
 
 (deftest create-link-handler-test
   (with-transaction [test-db db/db {:rollback-only true}]

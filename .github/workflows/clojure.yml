@@ -12,8 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Install dependencies
-      run: lein deps
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Start docker containers
+      run: docker-compose up -d
+
     - name: Run tests
-      run: lein test
+      run: docker-compose exec web -- lein test

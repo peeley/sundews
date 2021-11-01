@@ -1,8 +1,17 @@
 (ns sundews.db-test
   (:require [sundews.db :as db]
             [next.jdbc :refer [with-transaction]]
-            [clojure.test :refer [deftest is testing]]
-            [java-time :as time]))
+            [clojure.test :as t :refer [deftest is testing]]
+            [java-time :as time]
+            [mount.core :as mount]))
+
+(defn db-fixture
+  [f]
+  (mount/start #'db/db)
+  (f)
+  (mount/stop #'db/db))
+
+(t/use-fixtures :once db-fixture)
 
 (deftest db-tests
   (with-transaction [test-db db/db {:rollback-only true}]
