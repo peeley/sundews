@@ -28,10 +28,59 @@ resource "aws_ecr_repository" "sundews_container_repository" {
   }
 }
 
+resource "aws_iam_group" "sundews_group" {
+  name = "sundews"
+}
+
 resource "aws_iam_user" "sundews_github_actions_ci" {
-  name = "sundews_github_actions"
+  name = "sundews_github_actions_ci"
 }
 
 resource "aws_iam_access_key" "sundews_github_actions_ci" {
   user = aws_iam_user.sundews_github_actions_ci.name
+}
+
+output "sundews_github_actions_ci_iam_secret" {
+  sensitive = true
+  value     = aws_iam_access_key.sundews_github_actions_ci.secret
+}
+
+resource "aws_iam_user" "sundews_terraform" {
+  name = "sundews_terraform"
+}
+
+resource "aws_iam_access_key" "sundews_terraform" {
+  user = aws_iam_user.sundews_terraform.name
+}
+
+output "sundews_terraform_iam_secret" {
+  sensitive = true
+  value     = aws_iam_access_key.sundews_terraform.secret
+}
+
+resource "aws_iam_group_membership" "sundews_group" {
+  name = "sundews-membership"
+
+  users = [
+    aws_iam_user.sundews_github_actions_ci.name,
+    aws_iam_user.sundews_terraform.name,
+  ]
+
+  group = aws_iam_group.sundews_group.name
+}
+
+resource "aws_iam_group_policy" "sundews_group_policy" {
+  name  = "sundews_group_policy"
+  group = aws_iam_group.sundews_group.name
+
+  policy = jsonencode({
+    "Version" : "2012-10-17",
+    "Statement" : [
+      {
+        "Effect" : "Allow",
+        "Action" : "*",
+        "Resource" : "*"
+      }
+    ]
+  })
 }
