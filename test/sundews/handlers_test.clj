@@ -9,7 +9,6 @@
 (defn db-fixture
   [f]
   (mount/start #'db/db)
-  (db/migrate-up db/db)
   (f)
   (mount/stop #'db/db))
 

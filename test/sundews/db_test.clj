@@ -5,16 +5,15 @@
             [java-time :as time]
             [mount.core :as mount]))
 
-;; TODO refactor, should only need to migrate once
 (defn db-fixture
   [f]
   (mount/start #'db/db)
-  (db/migrate-up db/db)
   (f)
   (mount/stop #'db/db))
 
 (t/use-fixtures :once db-fixture)
 
+;; requires db schema to be migrated
 (deftest db-tests
   (with-transaction [test-db db/db {:rollback-only true}]
     (let [insert-result (db/insert-link! test-db "foo.com")]

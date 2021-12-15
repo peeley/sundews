@@ -17,6 +17,7 @@
                  [ring/ring-defaults "0.3.3"]
                  [mount "0.1.16"]]
   :main ^:skip-aot sundews.core
+  :aliases {"migrate" ["run" "-m" "sundews.db/migrate-up"]}
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all
                        :jvm-opts ["-Dclojure.compiler.direct-linking=true"]}}

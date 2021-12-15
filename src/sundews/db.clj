@@ -1,7 +1,7 @@
 (ns sundews.db
   (:require [next.jdbc :as jdbc]
             [honey.sql :as sql]
-            [mount.core :refer [defstate]]))
+            [mount.core :as mount :refer [defstate]]))
 
 (def db-spec {:dbtype "postgresql"
               :dbname (System/getenv "DB_USER")
@@ -14,13 +14,15 @@
   :start (jdbc/get-datasource db-spec))
 
 (defn migrate-up
-  [db]
+  []
+  (mount/start #'db)
   (jdbc/execute! db
               ["CREATE TABLE IF NOT EXISTS links (
                     id SERIAL,
                     url TEXT NOT NULL,
                     created_at TIMESTAMP NOT NULL DEFAULT NOW()
-               );"]))
+               );"])
+  (mount/stop #'db))
 
 (defn migrate-down
   []
