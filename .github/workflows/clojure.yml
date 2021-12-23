@@ -3,11 +3,15 @@ name: Clojure CI
 on:
   push:
     branches: [ master ]
+    paths:
+      - '**.clj'
   pull_request:
     branches: [ master ]
+    paths:
+      - '**.clj'
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
 

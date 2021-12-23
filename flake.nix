@@ -36,6 +36,10 @@
         leiningen
         docker
       ];
+
+      shellHook = ''
+        ~/.emacs.d/bin/doom env
+      '';
     };
   };
 }
