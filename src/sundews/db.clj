@@ -25,7 +25,7 @@
   (mount/stop #'db))
 
 (defn migrate-down
-  []
+  [db]
   (jdbc/execute! db ["DROP TABLE links;"]))
 
 (defn insert-link!

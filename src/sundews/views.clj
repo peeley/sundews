@@ -4,37 +4,39 @@
             [ring.util.response :as response]
             [ring.util.anti-forgery :refer [anti-forgery-field]]))
 
-;; needed to suppress clj-kondo "Unresolved symbol" error when using macros
-(declare index-template)
-
 (defhtml index-template
-  [status shortened-link]
+  [link-validity]
   [:body [:h1 [:a {:href "/"} "Sundews"]]
-   (when (= status :success)
-     [:p "Your shortened link is " [:a {:href (str "/" shortened-link)} shortened-link]])
-   (when (= status :invalid)
+   (when (= link-validity :invalid)
      [:p "Your submitted link is invalid."])
    (form/form-to [:post "/links/create"]
                  (anti-forgery-field)
                  (form/text-field {:placeholder "Shorten link"} "link")
                  (form/submit-button "Submit"))])
 
-(declare not-found-template)
-
 (defhtml not-found-template
   []
   [:body [:h1 "Page not found."]])
 
+(defhtml link-created-template
+  [shortened-link]
+  [:p "Your link was shortened successfully: "
+   [:a {:href (str "/" shortened-link)} shortened-link]])
+
 (defn- make-view
-  [status view]
+  [view & {:keys [status] :or {status 200}}]
   (-> {:status status :body view}
       (response/content-type "text/html")
       (response/charset "utf-8")))
 
+(defn link-created
+  [shortened-link]
+  (make-view (link-created-template shortened-link)))
+
 (defn index
-  [status & [link-status shortened-link]]
-  (make-view status (index-template link-status shortened-link)))
+  [status & [link-validity]]
+  (make-view (index-template link-validity) :status status))
 
 (defn not-found
   []
-  (make-view 404 (not-found-template)))
+  (make-view (not-found-template) :status 404))

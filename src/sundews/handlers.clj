@@ -14,7 +14,7 @@
     (views/index 403 :invalid)
     (let [link-id (:links/id (db/insert-link! db link))
           link-slug (links/encode-id-to-slug link-id)]
-      (views/index 200 :success link-slug))))
+      (response/redirect (str "/links/created/" link-slug)))))
 
 (defn redirect-handler
   [db slug]
@@ -24,6 +24,10 @@
       (response/redirect redirect-url)
       (-> (response/not-found "This link is either expired or invalid.")
           (response/content-type "text/html")))))
+
+(defn link-created-handler
+  [short-link]
+  (views/link-created short-link))
 
 (defn not-found-handler
   []
