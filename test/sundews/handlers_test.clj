@@ -4,7 +4,8 @@
             [sundews.links :as links]
             [clojure.test :as t :refer [deftest is testing]]
             [mount.core :as mount]
-            [next.jdbc :refer [with-transaction]]))
+            [next.jdbc :refer [with-transaction]]
+            [clojure.string :as str]))
 
 (defn db-fixture
   [f]
@@ -21,7 +22,8 @@
         (is (= (:status response) 403))))
     (testing "Can store submitted links in the database"
       (let [response (handlers/create-link-handler test-db "abc.com")]
-        (is (= (:status response) 200))
+        (is (= (:status response) 302))
+        (is (-> response :headers (get "Location") (str/includes? "/links/created")))
         (is (not-empty (db/get-link-by-url test-db "abc.com")))))))
 
 (deftest redirect-handler-test
